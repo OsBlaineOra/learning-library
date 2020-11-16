@@ -4,7 +4,7 @@
 
 [Overview](#overview)
 
-[Pre-Requisites](#pre-requisites)
+[Prerequisites](#Prerequisites)
 
 [Sign in to OCI Console and create a VCN](#sign-in-to-oci-console-and-create-a-vcn)
 
@@ -42,7 +42,7 @@ This lab will demonstration both provisioning and configuration of your infrastr
 
 **Note:** The OCI UI is regularly being enhanced.  Therefore, some screenshots in the instructions might be different than actual user interface.
 
-## Pre-Requisites
+## Prerequisites
 
 1. OCI Training : https://cloud.oracle.com/en_US/iaas/training
 
@@ -65,10 +65,7 @@ This lab will demonstration both provisioning and configuration of your infrastr
 1. Sign in using your tenant name, user name and password. Use the login option under **Oracle Cloud Infrastructure**
 <img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/Grafana/img/Grafana_015.PNG" alt="image-alt-text">
 
-2.  From the OCI Services menu,Click **Virtual Cloud Network**. Select the compartment assigned to you from drop down menu on left part of the screen under Networking and Click **Networking QuickStart**
-
-<img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/OCI_Quick_Start/img/RESERVEDIP_HOL001.PNG" alt="image-alt-text">
-
+2.  From the OCI Services menu,Click **Virtual Cloud Networks** under Networking. Select the compartment assigned to you from drop down menu on left part of the screen under Networking and Click **Start VCN Wizard**
 
 **NOTE:** Ensure the correct Compartment is selected under COMPARTMENT list
 

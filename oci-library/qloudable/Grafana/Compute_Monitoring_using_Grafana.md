@@ -4,7 +4,7 @@
 
 [Overview](#overview)
 
-[Pre-Requisites](#pre-requisites)
+[Prerequisites](#Prerequisites)
 
 [Sign in to OCI Console and create VCN](#sign-in-to-oci-console-and-create-vcn)
 
@@ -45,7 +45,7 @@ Essentially, it’s a feature-rich replacement for Graphite-web, which helps use
 
 **Note:** OCI UI is being updated thus some screenshots in the instructions might be different than actual UI
 
-## Pre-Requisites
+## Prerequisites
 
 1. Oracle Cloud Infrastructure account credentials (User, Password, Tenant, and Compartment)  
 
@@ -72,9 +72,7 @@ Essentially, it’s a feature-rich replacement for Graphite-web, which helps use
 
 <img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/Grafana/img/Grafana_015.PNG" alt="image-alt-text">
 
-2. From the OCI Services menu,Click **Virtual Cloud Network**. Select the compartment assigned to you from drop down menu on left part of the screen under Networking and Click **Networking QuickStart**
-
-<img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/OCI_Quick_Start/img/RESERVEDIP_HOL001.PNG" alt="image-alt-text">
+2. From the OCI Services menu,Click **Virtual Cloud Networks** under Networking. Select the compartment assigned to you from drop down menu on left part of the screen under Networking and Click **Start VCN Wizard**
 
 **NOTE:** Ensure the correct Compartment is selected under COMPARTMENT list
 
@@ -233,6 +231,8 @@ sudo systemctl start grafana-server
 
 5. Now we will login to Grafana Console, Open a new Broswer tab and enter URL http://localhost:3000 , You should see grafana console
 
+**NOTE: You can use your OCI compute instance Public IP instead of 'localhot' as well**
+
 User name and password are 'admin' 
 
 <img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/Grafana/img/Grafana_003.PNG" alt="image-alt-text">
@@ -260,7 +260,7 @@ User name and password are 'admin'
 <img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/Grafana/img/Grafana_008.PNG" alt="image-alt-text">
 
 12. Switch to Grafana tab and paste the OCID in **Tenancy OCID**. Choose your region for **Default Region**
-Choose **OCI Instance** for Enviornment.
+Choose **OCI Instance** for environment.
 
 <img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/Grafana/img/Grafana_009.PNG" alt="image-alt-text">
 

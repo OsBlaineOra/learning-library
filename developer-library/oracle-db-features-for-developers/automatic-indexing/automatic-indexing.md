@@ -1,11 +1,17 @@
 # Automatic Indexing
 
 ## Introduction
+In this lab you will explore the various features and benefits of Oracle's Automatic Indexing feature added in Oracle Database 19c.
+
+Estimated Lab Time: 20 minutes
+
+## About Automatic Indexing
+
 The automatic indexing feature automates index management tasks based on changes in the application workload. This feature improves database performance by managing indexes automatically in an Oracle database.
 
-Traditionally, DBAs have been responsible to monitoring performance and deciding when and where to add, change or remove indexes in a tactical and often ad-hoc manner. This ad-hoc approach to index maintenance is prone to error because it is almost impossible to quantify the effect any change – both positive and negative. This may lead to a database that has many more indexes than necessary, where indexes have been gradually added over time and there is a reluctance to remove any of them for fear of negative consequences. This will lead to an increase the system resources required to maintain indexes when data is modified and processed. In addition, over-indexed environments often suffer from less stable SQL execution plans as the sheer number of indexes make the  optimizer's choice of index access path more and more finely balanced.
+Traditionally, DBAs have been responsible for monitoring performance and deciding when and where to add, change or remove indexes in a tactical and often ad-hoc manner. This ad-hoc approach to index maintenance is prone to error because it is almost impossible to quantify the effect of any change – both positive and negative. This may lead to a database that has many more indexes than necessary, where indexes have been gradually added over time and there is a reluctance to remove any of them for fear of negative consequences. This will lead to an increase in the system resources required to maintain indexes when data is modified and processed. Also, over-indexed environments often suffer from less stable SQL execution plans as the sheer number of indexes make the optimizer's choice of index access path more and more finely balanced.
 
-Automatic indexing addresses these issues. It is not a simple advisor, but instead it is an expert system that implements indexes based on what a performance engineer skilled in index tuning would do. The Oracle Database analyzes the application workload and identifies the queries that will benefit from additional indexes. In other words, it identifies candidate indexes and validates them before implementation, and the entire process is fully automatic.
+Automatic indexing addresses these issues. It is not a simple advisor, but instead, it is an expert system that implements indexes based on what a performance engineer skilled in index tuning would do. The Oracle Database analyzes the application workload and identifies the queries that will benefit from additional indexes. In other words, it identifies candidate indexes and validates them before implementation, and the entire process is fully automatic.
 
 Here is a summary of the workflow:
   ![](images/ai_flow.png " ")
@@ -20,8 +26,9 @@ Watch the video below to view the benefits of the Automatic Indexing feature.
 -   Discover how Automatic Indexing manages indexes in the Oracle Database
 -   Validate Automatic Index operations
 
-### Lab Prerequisites
-This Lab can ONLY be run on Exadata environments; attempting to enable Automatic Indexing on non-Exadata systems will result in an error.
+### Prerequisites
+
+*Note : This Lab can ONLY be run on Exadata environments; attempting to enable Automatic Indexing on non-Exadata systems will result in an error.*
 
 This lab assumes you have completed the following labs:
 * Lab: Login to Oracle Cloud
@@ -29,34 +36,49 @@ This lab assumes you have completed the following labs:
 * Lab: Environment Setup
 * Lab: Sample Schema Setup
 
-## Step 1: Verify sample data and drop indexes
+## **Step 1**: Verify sample data and drop indexes
 
-Index structures are an essential feature to database performance. Indexes are critical for OLTP applications, which use large data sets and run millions of SQL statements a day. Indexes are also critical for data warehousing applications, which typically query a relatively small amount of data from very large tables. If you do not update the indexes whenever there are changes in the application workload, the existing indexes can cause the database performance to deteriorate considerably.
+Index structures are an essential feature of database performance. Indexes are critical for OLTP applications, which use large data sets and run millions of SQL statements a day. Indexes are also critical for data warehousing applications, which typically query a relatively small amount of data from very large tables. If you do not update the indexes whenever there are changes in the application workload, the existing indexes can cause the database performance to deteriorate considerably.
 
-Automatic indexing improves database performance by managing indexes automatically and dynamically  based on changes in the application workload. To test this feature, we will start by listing and dropping existing indexes in our sample schema. This way we can experience, in a very simple hands-on exercise, how this feature works in Oracle 19c Database.
+Automatic indexing improves database performance by managing indexes automatically and dynamically based on changes in the application workload. To test this feature, we will start by listing and dropping existing indexes in our sample schema. This way we can experience, in a very simple hands-on exercise, how this feature works in Oracle 19c Database.
 
 This Lab will use the Sales History (SH) sample schema.
 
-0.  Login to the instance using ssh.
+1.  If you aren't already logged in, login to the instance using ssh.  If you are already logged in as the *opc* user, skip to Step 4.
 
     ````
-    ssh -i yourkeyname opc@ your ip address
+    ssh -i ~/.ssh/<sshkeyname> opc@<Your Compute Instance Public IP Address>
     ````
 
-1.  Use SQLPlus to connect to the **PDB01** Pluggable database as SYS.
-
+2.  Switch to the oracle user
     ````
     <copy>
     sudo su - oracle
+    </copy>
+    ````
+    ![](./images/sudo-oracle.png " ")
+
+3.  Set your oracle environment.  When prompted enter **[ORCL]**
+    ````
+    <copy>
     . oraenv
-    [ORCL]
+    </copy>
+    ORACLE_SID = [ORCL] ? ORCL
+    The Oracle base remains unchanged with value /u01/app/oracle
+    ````
+    ![](./images/oraenv.png " ")
+
+4.  Use SQLPlus to connect to the **PDB01** Pluggable database as SYS.
+
+    ````
+    <copy>
     sqlplus sys/Ora_DB4U@localhost:1521/orclpdb as SYSDBA
     </copy>
     ````
 
-    ![](./images/step1.1-connect.png " ")
+    ![](./images/sqlplus.png " ")
 
-2.  List all existing indexes in the **SH** schema.
+5.  List all existing indexes in the **SH** schema.
 
     ````
     <copy>
@@ -73,7 +95,7 @@ This Lab will use the Sales History (SH) sample schema.
 
     ![](images/ai_indexes.png " ")
 
-3.  For the purpose of this exercise we will drop all existing secondary indexes. NOTE: DO NOT DO THIS ON ANY PRODUCTION SYSTEM.
+6.  For the purpose of this exercise, we will drop all existing secondary indexes. *NOTE: DO NOT DO THIS ON ANY PRODUCTION SYSTEM.*
 
     ````
     <copy>
@@ -99,7 +121,7 @@ This Lab will use the Sales History (SH) sample schema.
 
     ![](./images/step1.3-dropindexes.png " " )
 
-4.  Gather **SH** schema statistics.
+7.  Gather **SH** schema statistics.
 
     ````
     <copy>
@@ -109,7 +131,7 @@ This Lab will use the Sales History (SH) sample schema.
 
     ![](./images/step1.4-gatherstats.png " " )
 
-## Step 2: Logging In and Examining Schema
+## **Step 2**: Logging In and Examining Schema
 
 1.  All scripts for this lab are stored in the labs/new-features-for-developers/automaticindexing folder and are run as the oracle user. Let's navigate there now. We recommend you to type the commands to get a feel for working on the lab. But we will also allow you to copy the commands via the COPY button.
 
@@ -144,8 +166,8 @@ This Lab will use the Sales History (SH) sample schema.
     *Note: AUTOMATIC INDEXING can only be enabled on EXADATA systems. Attempting to enable Automatic Indexing on non-EXADATA machines will result in ORA-40216.*
 
 3.  There are three possible values for AUTO\_INDEX\_MODE configuration setting: OFF (default), IMPLEMENT, and REPORT ONLY.
-    - OFF disables automatic indexing in a database, so that no new auto indexes are created, and the existing auto indexes are disabled.
-    - IMPLEMENT enables automatic indexing in a database and creates any new auto indexes as visible indexes, so that they can be used in SQL statements.
+    - OFF disables automatic indexing in a database so that no new auto indexes are created, and the existing auto indexes are disabled.
+    - IMPLEMENT enables automatic indexing in a database and creates any new auto indexes as visible indexes so that they can be used in SQL statements.
     - REPORT ONLY enables automatic indexing in a database, but creates any new auto indexes as invisible indexes, so that they cannot be used in SQL statements.
 
     Enter the command to enable Automatic Indexing.
@@ -156,11 +178,13 @@ This Lab will use the Sales History (SH) sample schema.
     </copy>
     ````
 
-## Step 3: Add Schemas
+## **Step 3**: Add Schemas
 
 The Oracle environment is already set up so sqlplus can be invoked directly from the shell environment. Since the lab is being run in a pdb called ORCLPDB you must supply this alias when connecting to the SH account.
 
-1.  Login to the pdb as the SH user.
+*Note: AUTOMATIC INDEXING can only be enabled on EXADATA systems. Attempting to enable Automatic Indexing on non-EXADATA machines will result in ORA-40216.*
+
+1.  Login to the pdb as the *SH* user.
 
     ````
     <copy>
@@ -191,14 +215,13 @@ The Oracle environment is already set up so sqlplus can be invoked directly from
 
 3.  Enable Automatic Indexing for a specific schema.
 
-    It is possible to specify which schemas are subject to auto indexing. The following statement adds the HR schema to the exclusion list, so that the HR schema cannot use auto indexes.
+    It is possible to specify which schemas are subject to auto-indexing. The following statement adds the HR schema to the exclusion list so that the HR schema cannot use auto indexes.
 
     ````
     <copy>
     exec DBMS_AUTO_INDEX.CONFIGURE('AUTO_INDEX_SCHEMA', 'HR', FALSE);
     </copy>
     ````
-
 
 4.  The following statement removes all of the schemas from the exclusion list. All schemas in the database can use auto indexes.
 
@@ -208,7 +231,7 @@ The Oracle environment is already set up so sqlplus can be invoked directly from
     </copy>
     ````
 
-5.  Enable Automatic Indexxing for the SH and OE schemas. The following statement restricts Automatic Indexing to these named schemas:
+5.  Enable Automatic Indexing for the SH and OE schemas. The following statement restricts Automatic Indexing to these named schemas.
 
     ````
     <copy>
@@ -230,7 +253,6 @@ The Oracle environment is already set up so sqlplus can be invoked directly from
 
     ![](images/ai_config.png " ")
 
-
 7.  Generate a report on Automatic Indexing operations. You can generate reports related to automatic indexing operations in an Oracle database using the REPORT\_ACTIVITY and REPORT\_LAST\_ACTIVITY functions of the DBMS\_AUTO\_INDEX package.
 
     ````
@@ -245,10 +267,10 @@ The Oracle environment is already set up so sqlplus can be invoked directly from
 
     This sample report will show Automatic Indexes activity for the last 30 days. If Automatic Indexing were *OFF* during this time, there may be minimal or no information.
 
-## Step 4: Run a workload
+## **Step 4**: Run a workload
 
 Automatic indexing can work with data for OLTP applications, which use large data sets and run millions of SQL statements a day, as well as with data for data warehousing applications.
-In this Lab, we don’t have ay application running on our database, so we will generate a synthetic workload manually.
+In this lab, we don’t have any application running on our database, so we will generate a synthetic workload manually.
 
 1. Create a **DUMMY** table.
 
@@ -264,7 +286,7 @@ In this Lab, we don’t have ay application running on our database, so we will 
 
     ![](images/ai_cr_temp.png " ")
 
-2.  Insert data in to your newly created tables.
+2.  Insert data into your newly created tables.
 
     ````
     <copy>
@@ -292,7 +314,7 @@ In this Lab, we don’t have ay application running on our database, so we will 
 
     ![](images/ai_cr_cust.png " ")
 
-    Now you have some tables you can modify, and at the same time some OLTP workload was generated on our database. You can check how automatic indexing feature reacts to this type of workload, but before doing that it is recommended to gather statistics.
+    Now you have some tables you can modify, and at the same time, some OLTP workload was generated on our database. You can check how automatic indexing feature reacts to this type of workload, but before doing that it is recommended to gather statistics.
 
     ````
     <copy>
@@ -302,7 +324,7 @@ In this Lab, we don’t have ay application running on our database, so we will 
 
     ![](images/ai_stats_gather.png " ")
 
-## Step 5: View Advisor Tasks
+## **Step 5**: View Advisor Tasks
 
 DBA\_ADVISOR\_TASKS displays information about all tasks in the database. The view contains one row for each task. Each task has a name that is unique to the owner. We are interested in the STATUS of the task named SYS\_AUTO\_INDEX\_TASK. This STATUS can be:
 - INITIAL - Initial state of the task; no recommendations are present.
@@ -342,22 +364,23 @@ DBA\_ADVISOR\_TASKS displays information about all tasks in the database. The vi
     </copy>
     ````
 
-## Step 6: Generate Workload
+## **Step 6**: Generate Workload
 
 Automatic indexing improves database performance by managing indexes automatically and dynamically in an Oracle database based on changes in the application workload. This is why we need more workload on our Pluggable Database ORCLPDB, to simulate changes in the application workload.
 
-1.  The following sample code will operate against the data in the SH schema. Execute these blocks of code from SQLPlus (or SQLCI or SQLDeveloper if you have these installed)
+1.  The following sample code will operate against the data in the *SH* schema. Execute these blocks of code from SQLPlus (or SQLCI or SQLDeveloper if you have these installed).
 
     ````
     <copy>
-    sqlplus sh/Ora_DB4U@localhost:1521/order
+    sqlplus sh/Ora_DB4U@localhost:1521/orclpdb
 
     set serveroutput on
+
     set timing on
     </copy>
     ````
 
-2.  A query executed multiple times in a FOR LOOP (stored as file /home/oracle/labs/new-features-for-developers/automaticindexing/ai_query1.sql)
+2.  A query executed multiple times in a FOR LOOP (stored as file /home/oracle/labs/new-features-for-developers/automaticindexing/ai_query1.sql).
 
     ````
     <copy>
@@ -381,7 +404,7 @@ Automatic indexing improves database performance by managing indexes automatical
 
     ![](images/ai_query1_results.png " ")
 
-3.  Similar query selecting from different quarters (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai_query2.sql):
+3.  Similar query selecting from different quarters (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai_query2.sql).
 
     ````
     <copy>
@@ -405,7 +428,7 @@ Automatic indexing improves database performance by managing indexes automatical
 
     ![](images/ai_query2_results.png " ")
 
-4.  Run the code blocks repeatedly from within SQLPlus (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai_query3.sql)
+4.  Run the code blocks repeatedly from within SQLPlus (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai_query3.sql).
 
     ````
     <copy>
@@ -427,7 +450,7 @@ Automatic indexing improves database performance by managing indexes automatical
 
     ![](images/ai_query3_results.png " ")
 
-5.  You can also run queries against the new tables we created earlier. (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai_query4.sql)
+5.  You can also run queries against the new tables we created earlier (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai_query4.sql).
 
     ````
     <copy>
@@ -446,7 +469,7 @@ Automatic indexing improves database performance by managing indexes automatical
 
     ![](images/ai_query4_results.png " ")
 
-6.  These tables will be also used to identify candidate indexes, and we gathered optimizer statistics after their creation. (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai_query5.sql)
+6.  These tables will be also used to identify candidate indexes, and we gathered optimizer statistics after their creation (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai_query5.sql).
 
     ````
     <copy>
@@ -465,9 +488,9 @@ Automatic indexing improves database performance by managing indexes automatical
 
     ![](images/ai_query5_results.png " ")
 
-7. Automatic indexing is also capable of handling advanced business intelligence queries.
+7.  Automatic indexing is also capable of handling advanced business intelligence queries.
 
-    Here is an example of an advanced analytical SQL statement. This query returns the percent change in market share for a grouping of SH top 20% of products for the current three-month period versus same period one year ago for accounts that grew by more than 20 percent in revenue.(available in file  /home/oracle/labs/new-features-for-developers/automaticindexing/ai\_change\_market\_share.sql)
+    Here is an example of an advanced analytical SQL statement. This query returns the percent change in market share for a grouping of SH top 20% of products for the current three-month period versus same period one year ago for accounts that grew by more than 20 percent in revenue (available in file  /home/oracle/labs/new-features-for-developers/automaticindexing/ai\_change\_market\_share.sql).
 
     ````
     <copy>
@@ -540,11 +563,11 @@ Automatic indexing improves database performance by managing indexes automatical
 
     ![](images/ai_change_markt_share_results.png " ")
 
-## Step 7: Calculate a sales projection
+## **Step 7**: Calculate a sales projection
 
-You can build a query that projects sales for 2002 based on the sales of 2000 and 2001. Firtsly, finds the most percentage changes in sales from 2000 to 2001 and then adds that to the sales of 2002. You can build a subclause that finds the monthly sales per product by country for the years 2000, 2001, and 2002, and then a second subclause finds a list of distinct times at the month level.
+You can build a query that projects sales for 2002 based on the sales of 2000 and 2001. Firstly, finds the most percentage changes in sales from 2000 to 2001 and then adds that to the sales of 2002. You can build a subclause that finds the monthly sales per product by country for the years 2000, 2001, and 2002, and then a second subclause finds a list of distinct times at the month level.
 
-1.  First create a reference table of currency conversion factors (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai\_cr\_curr\_conv.sql):
+1.  First create a reference table of currency conversion factors (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai\_cr\_curr\_conv.sql).
 
     ````
     <copy>
@@ -556,9 +579,9 @@ You can build a query that projects sales for 2002 based on the sales of 2000 an
     </copy>
     ````
 
-    ![](images/startpop.png " ")
+    ![](images/step7.1-createtable.png " ")
 
-2.  Populate the table with conversion factors for each month for each country (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai\_ins\_curr\_conv.sql):
+2.  Populate the table with conversion factors for each month for each country (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai\_ins\_curr\_conv.sql).
 
     ````
     <copy>
@@ -582,43 +605,50 @@ You can build a query that projects sales for 2002 based on the sales of 2000 an
     </copy>
     ````
 
-4.  Build the sales projection query (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai\_sales\_proj.sql):
+    ![](images/step7.3-setconvfactor.png " ")
+
+4.  Build the sales projection query (file /home/oracle/labs/new-features-for-developers/automaticindexing/ai\_sales\_proj.sql).
 
     ````
     <copy>
-    WITH  prod_sales_mo AS ( SELECT country_name c, prod_id p, calendar_year  y,
-    calendar_month_number  m, SUM(amount_sold) s
-    FROM sales s, customers c, times t, countries cn, promotions p, channels ch
-    WHERE  s.promo_id = p.promo_id AND p.promo_total_id = 1 AND
-      s.channel_id = ch.channel_id AND ch.channel_total_id = 1 AND
-      s.cust_id=c.cust_id  AND
-      c.country_id=cn.country_id AND country_name='Canada' AND
-      s.time_id=t.time_id  AND t.calendar_year IN  (2000, 2001,2002)
-    GROUP BY cn.country_name, prod_id, calendar_year, calendar_month_number
-    ), time_summary AS( SELECT DISTINCT calendar_year cal_y, calendar_month_number cal_m
-    FROM times
-    WHERE  calendar_year IN  (2000, 2001, 2002) )
-    SELECT c, p, y, m, s,  nr FROM (
-    SELECT c, p, y, m, s,  nr
-    FROM prod_sales_mo s
-    PARTITION BY (s.c, s.p)
-    RIGHT OUTER JOIN time_summary ts ON (s.m = ts.cal_m AND s.y = ts.cal_y )
-    MODEL REFERENCE curr_conversion ON
-      (SELECT country, year, month, to_us
-      FROM currency)
-      DIMENSION BY (country, year y,month m) MEASURES (to_us)
+    WITH  prod_sales_mo AS
+      ( SELECT country_name c, prod_id p, calendar_year  y,
+        calendar_month_number  m, SUM(amount_sold) s
+        FROM sales s, customers c, times t, countries cn, promotions p, channels ch
+        WHERE  s.promo_id = p.promo_id AND p.promo_total_id = 1 AND
+              s.channel_id = ch.channel_id AND ch.channel_total_id = 1 AND
+              s.cust_id=c.cust_id  AND
+              c.country_id=cn.country_id AND country_name='Canada' AND
+              s.time_id=t.time_id  AND t.calendar_year IN  (2000, 2001,2002)
+        GROUP BY cn.country_name, prod_id, calendar_year, calendar_month_number), time_summary AS( SELECT DISTINCT calendar_year cal_y,
+                          calendar_month_number cal_m
+                          FROM times
+                          WHERE  calendar_year IN  (2000, 2001, 2002)
+              )
+    SELECT c, p, y, m, s, nr FROM (
+        SELECT c, p, y, m, s, nr
+        FROM prod_sales_mo s
+        PARTITION BY (s.c, s.p)
+        RIGHT OUTER JOIN time_summary ts ON (s.m = ts.cal_m AND s.y = ts.cal_y )
+    MODEL
+      REFERENCE curr_conversion ON
+        (SELECT country, year, month, to_us
+        FROM currency ORDER BY country,year,month)
+      DIMENSION BY (country, year y,month m ) MEASURES (to_us)
       PARTITION BY (s.c c)
       DIMENSION BY (s.p p, ts.cal_y y, ts.cal_m m)
-      MEASURES (s.s s, CAST(NULL AS NUMBER) nr, s.c cc )
-      RULES ( nr[ANY, ANY, ANY]
-      = CASE WHEN s[CV(), CV(), CV()] IS NOT NULL
-      THEN s[CV(), CV(), CV()]
-      ELSE ROUND(AVG(s)[CV(), CV(), m BETWEEN 1 AND 12],2)
-      END, nr[ANY, 2002, ANY] = ROUND(
-    ((nr[CV(),2001,CV()] - nr[CV(),2000, CV()])/ nr[CV(),2000, CV()]) * nr[CV(),2001, CV()]
-          + nr[CV(),2001, CV()],2),nr[ANY,y != 2002,ANY]
-        = ROUND(nr[CV(),CV(),CV()]
-          * curr_conversion.to_us[ cc[CV(),CV(),CV()], CV(y), CV(m)], 2) )
+              MEASURES (s.s s, CAST(NULL AS NUMBER) nr, s.c cc )
+      RULES ( nr[ANY, ANY, ANY] ORDER BY y, m ASC =
+                CASE
+                  WHEN s[CV(), CV(), CV()] IS NOT NULL
+                  THEN s[CV(), CV(), CV()]
+                  ELSE ROUND(AVG(s)[CV(), CV(), m BETWEEN 1 AND 12],2)
+                END,
+          nr[ANY, 2002, ANY] ORDER BY y,m ASC =
+            ROUND(((nr[CV(),2001,CV()] - nr[CV(),2000, CV()])/ nr[CV(),2000, CV()]) * nr[CV(),2001, CV()] + nr[CV(),2001,  CV()],2),
+          nr[ANY,y != 2002,ANY] ORDER BY y,m ASC =
+            ROUND(nr[CV(),CV(),CV()] * curr_conversion.to_us[ cc[CV(),CV(),CV()], CV(y), CV(m)], 2)
+          )
     ORDER BY c, p, y, m)
     WHERE y = '2002'
     ORDER BY c, p, y, m;
@@ -635,9 +665,11 @@ You can build a query that projects sales for 2002 based on the sales of 2000 an
     </copy>
     ````
 
-## Step 8: Automatic Indexing Results
+## **Step 8**: Automatic Indexing Results
 
-In this section you will look at how Automatic Indexing has worked to improve the performance of your queries.
+In this section, you will look at how Automatic Indexing has worked to improve the performance of your queries.
+
+*Note: AUTOMATIC INDEXING can only be enabled on EXADATA systems. Attempting to enable Automatic Indexing on non-EXADATA machines will result in ORA-40216.*
 
 1. Connect to **ORCLPDB** as **SYS**.
 
@@ -663,7 +695,7 @@ In this section you will look at how Automatic Indexing has worked to improve th
 
     Automatic indexing process runs in the background periodically at a predefined time interval, default is 15 minutes. It analyzes application workload, and accordingly creates new indexes and drops the existing underperforming indexes to improve database performance. It also rebuilds the indexes that are marked unusable due to table partitioning maintenance operations, such as ALTER TABLE MOVE.
 
-    Count all VALID and VISIBLE indexes in the SH schema, that are auto indexes (AUTO = ‘YES’).
+    Count all VALID and VISIBLE indexes in the SH schema, which are auto indexes (AUTO = ‘YES’).
 
     ````
     <copy>
@@ -680,7 +712,7 @@ In this section you will look at how Automatic Indexing has worked to improve th
 
     Note: If there are no valid visible new indexes, please run the workload again (Step 6) as SH user, and then re-run the query above (of DBA_INDEXES) as SYSDBA.
 
-4.  List all of the indexes, including any newly created AUTO indexes
+4.  List all of the indexes, including any newly created AUTO indexes.
 
     ````
     <copy>
@@ -696,9 +728,9 @@ In this section you will look at how Automatic Indexing has worked to improve th
     </copy>
     ````
 
-    Identify the auto indexes for the list. Observe the tables on which these indexes have been Ireated, and their types.
+    Identify the auto indexes for the list. Observe the tables on which these indexes have been created and their types.
 
-5.  Generate Automatic Indexing Report.
+5.  Generate the Automatic Indexing Report.
 
     Automatic Indexing provides PL/SQL APIs for configuring automatic indexing in a database and generating reports related to automatic indexing operations.
 
@@ -767,7 +799,7 @@ In this section you will look at how Automatic Indexing has worked to improve th
     | ---------------------- |
     | Report continues       |
 
-    In this example report, automatic indexing identified 18 candidates, and created 9 indexes, 5 visible and 4 invisible.
+    In this example report, automatic indexing identified 18 candidates and created 9 indexes, 5 visible and, 4 invisible.
 
     Auto index candidates are identified based on the usage of table columns in SQL statements.
 
@@ -775,19 +807,23 @@ In this section you will look at how Automatic Indexing has worked to improve th
 
     The invisible auto indexes are validated against SQL statements. If the performance of SQL statements is improved by using these indexes, then the indexes are configured as visible indexes, so that they can be used in SQL statements.
 
-    If the performance of SQL statements is not improved by using these indexes, then the indexes are configured as unusable indexes and the SQL statements are blacklisted. The unusable indexes are later deleted by the automatic indexing process. The blacklisted SQL statements are not allowed to use auto indexes in future.
+    If the performance of SQL statements is not improved by using these indexes, then the indexes are configured as unusable indexes and the SQL statements are blacklisted. The unusable indexes are later deleted by the automatic indexing process. The blacklisted SQL statements are not allowed to use auto indexes in the future.
 
     The auto indexes that are not used for a long period are dropped. No indexes were dropped in this example report.
 
-    Please also review the information in the Original Plan vs. Auto Index Plan comparison section. This comparison is performed using different metrics such as: Elapsed Time (s), CPU Time (s), or Optimizer Cost.
+    Please also review the information in the Original Plan vs. Auto Index Plan comparison section. This comparison is performed using different metrics such as Elapsed Time (s), CPU Time (s), or Optimizer Cost.
 
 ## Conclusion
 
-In this Lab you had an opportunity to examine the Automatic Indexing capabilities of Oracle Database 19c.
+In this lab, you had an opportunity to examine the Automatic Indexing capabilities of Oracle Database 19c.
 
-## Acknowledgements
+## **Acknowledgements**
 
 - **Author** - Jean-Francois Verrier
-- **Last Updated By/Date** - Troy Anthony, April 2020
+- **Contributors** - Anoosha Pilli, Product Manager, DB Product Management | Dylan McLeod, LiveLabs QA Intern
+- **Last Updated By/Date** - Arabella Yao, Product Manager Intern, DB Product Management, July 2020
 
-See an issue?  Please open up a request [here](https://github.com/oracle/learning-library/issues).   Please include the workshop name and lab in your request.
+## Need Help?
+Please submit feedback or ask for help using our [LiveLabs Support Forum](https://community.oracle.com/tech/developers/categories/database-19c). Please click the **Log In** button and login using your Oracle Account. Click the **Ask A Question** button to the left to start a *New Discussion* or *Ask a Question*.  Please include your workshop name and lab name.  You can also include screenshots and attach files.  Engage directly with the author of the workshop.
+
+If you do not have an Oracle Account, click [here](https://profile.oracle.com/myprofile/account/create-account.jspx) to create one.

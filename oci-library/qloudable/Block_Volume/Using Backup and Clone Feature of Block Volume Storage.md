@@ -4,7 +4,7 @@
 
 [Overview](#overview)
 
-[Pre-Requisites](#pre-requisites)
+[Prerequisites](#Prerequisites)
 
 [Sign in to OCI Console and create VCN](#sign-in-to-oci-console-and-create-vcn)
 
@@ -46,7 +46,7 @@ In this lab you will create and attach Block Volume Storage to a compute instanc
 
 **Note:** OCI UI is being updated thus some screenshots in the instructions might be different than actual UI
 
-## Pre-Requisites
+## Prerequisites
 
 1. Oracle Cloud Infrastructure account credentials (User, Password, Tenant, and Compartment)  
 
@@ -73,18 +73,13 @@ In this lab you will create and attach Block Volume Storage to a compute instanc
 
 <img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/Grafana/img/Grafana_015.PNG" alt="image-alt-text">
 
-2. From the OCI Services menu,Click **Virtual Cloud Network**. Select the compartment assigned to you from drop down menu on left part of the screen under Networking and Click **Networking QuickStart**
-
-<img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/OCI_Quick_Start/img/RESERVEDIP_HOL001.PNG" alt="image-alt-text">
-
+2. From the OCI Services menu,Click **Virtual Cloud Networks** under Networking. Select the compartment assigned to you from drop down menu on left part of the screen under Networking and Click **Start VCN Wizard**
 
 **NOTE:** Ensure the correct Compartment is selected under COMPARTMENT list
-
 
 3. Click **VCN with Internet Connectivity** and click **Start Workflow**
 
 4. Fill out the dialog box:
-
 
 - **VCN NAME**: Provide a name
 - **COMPARTMENT**: Ensure your compartment is selected

@@ -6,7 +6,7 @@
 
 -    Learn how to use location-based queries with Spatial
 
-### Lab Prerequisites
+### Prerequisites
 
 This lab assumes you have completed the following labs:
 * Lab: Login to Oracle Cloud
@@ -22,7 +22,7 @@ This tutorial uses CUSTOMERS and WAREHOUSES tables. WAREHOUSES are created from 
 
 Each table stores location using Oracle's native spatial data type, ```SDO_GEOMETRY```. A location can be stored as a point in an ```SDO_GEOMETRY``` column of a table. The customer's location is associated with longitude and latitude values on the Earth's surface - for example, -63.13631, 52.485426.
 
-## Step 1: Prepare the Lab Environment
+## **Step 1:** Prepare the Lab Environment
 
 1. Work as **oracle** user, connect to the PDB **orclpdb** with **system** user.
 
@@ -32,7 +32,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
    </copy>
    ```
 
-   <img src="images/image-20200429141652550.png" alt="image-20200429141652550" style="zoom:42%;" /> 
+   ![](./images/image-20200429141652550.png " ") 
 
 2. Create a lab user and grant to sufficient priviledge.
 
@@ -45,7 +45,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
    </copy>
    ```
 
-   <img src="images/image-20200429142033036.png" alt="image-20200429142033036" style="zoom:42%;" /> 
+   ![](./images/image-20200429142033036.png " ") 
 
 3. Connect with the lab user: 
 
@@ -55,7 +55,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
    </copy>
    ```
 
-  <img src="images/image-20200429142418160.png" alt="image-20200429142418160" style="zoom:42%;" /> 
+  ![](./images/image-20200429142418160.png " ") 
 
 4. Create the **CUSTOMERS** and **WAREHOUSES** tables. Notice that each table has a column of type SDO_GEOMETRY to store location.
 
@@ -81,7 +81,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
    </copy>
    ```
 
-  <img src="images/image-20200429143413126.png" alt="image-20200429143413126" style="zoom:42%;" /> 
+  ![](./images/image-20200429143413126.png " ") 
 
 5. Next we add Spatial metadata for the CUSTOMERS and WAREHOUSES tables to the ```USER_SDO_GEOM_METADATA``` view. Each ```SDO_GEOMETRY``` column is registered with a row in ```USER_SDO_GEOM_METADATA```. This is normally a simple INSERT statement, and a GUI in SQL Developer. We can use a procedure that gets the actual database username:
 
@@ -101,7 +101,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
      </copy>
    ```
 
-   <img src="images/image-20200429143554809.png" alt="image-20200429143554809" style="zoom:42%;" /> 
+   ![](./images/image-20200429143554809.png " ") 
 
    Here is a description of the items that were entered:
    
@@ -112,7 +112,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
 
 
 
-## Step 2: Load Data and Create Spatial Index
+## **Step 2:** Load Data and Create Spatial Index
 
 1. First we load CUSTOMERS by copying from the table OE.CUSTOMERS. Note that we are using two spatial functions in this step: 
 
@@ -129,7 +129,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
     </copy>
     ```
 
-    <img src="images/image-20200429144232710.png" alt="image-20200429144232710" style="zoom:42%;" /> 
+    ![](./images/image-20200429144232710.png " ") 
 
 2. Next WAREHOUSES manually load warehouses using the ```SDO_GEOMETRY``` constructor.
 
@@ -143,7 +143,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
     </copy>
     ```
 
-    <img src="images/image-20200429144606665.png" alt="image-20200429144606665" style="zoom:42%;" /> 
+    ![](./images/image-20200429144606665.png " ") 
 
     The elements of the constructor are:
     
@@ -162,9 +162,9 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
     </copy>
     ```
     
-    <img src="images/image-20200429144831067.png" alt="image-20200429144831067" style="zoom:42%;" /> 
+    ![](./images/image-20200429144831067.png " ") 
 
-## Step 3: Perform location-based queries
+## **Step 3:** Perform location-based queries
 1. Find the five customers closest to the warehouse whose warehouse ID is 3. 
 
     ````
@@ -179,7 +179,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
     AND sdo_nn (c.cust_geo_location, w.wh_geo_location, 'sdo_num_res=5') = 'TRUE';
     </copy>
     ````
-    <img src="images/image-20200429145236825.png" alt="image-20200429145236825" style="zoom:42%;" /> 
+    ![](./images/image-20200429145236825.png " ") 
 
     **Notes on Query 1**:
     
@@ -203,7 +203,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
     ORDER BY distance_in_miles;
     </copy>
     ````
-    <img src="images/image-20200429145439445.png" alt="image-20200429145439445" style="zoom:42%;" />  
+    ![](./images/image-20200429145439445.png " ")  
 
     **Notes on Query 2**:
     
@@ -231,7 +231,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
     </copy>
     ````
 
-    <img src="images/image-20200429145634013.png" alt="image-20200429145634013" style="zoom:42%;" /> 
+    ![](./images/image-20200429145634013.png " ") 
 
     **Notes on Query 3**:
     
@@ -259,7 +259,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
     </copy>
     ```
 
-    <img src="images/image-20200429150053921.png" alt="image-20200429150053921" style="zoom:42%;" /> 
+    ![](./images/image-20200429150053921.png " ") 
 
     **Notes on Query 4**:
     
@@ -289,7 +289,7 @@ Each table stores location using Oracle's native spatial data type, ```SDO_GEOME
     </copy>
     ````
 
-    <img src="images/image-20200429150240494.png" alt="image-20200429150240494" style="zoom:42%;" /> 
+    ![](./images/image-20200429150240494.png " ") 
 
     **Notes on Query 5**:
     
@@ -318,4 +318,7 @@ For more information, please see the Spatial Developer's Guide at [https://docs.
 - **Author** - Minqiao Wang, DB Product Management, April 2020
 - **Last Updated By/Date** - 
 
-See an issue?  Please open up a request [here](https://github.com/oracle/learning-library/issues).   Please include the workshop name and lab in your request.    Please include the workshop name and lab in your request.  
+## Need Help?
+Please submit feedback or ask for help using our [LiveLabs Support Forum](https://community.oracle.com/tech/developers/categories/livelabsdiscussions). Please click the **Log In** button and login using your Oracle Account. Click the **Ask A Question** button to the left to start a *New Discussion* or *Ask a Question*.  Please include your workshop name and lab name.  You can also include screenshots and attach files.  Engage directly with the author of the workshop.
+
+If you do not have an Oracle Account, click [here](https://profile.oracle.com/myprofile/account/create-account.jspx) to create one.    Please include the workshop name and lab in your request.  

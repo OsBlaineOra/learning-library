@@ -4,7 +4,7 @@
 
 [Overview](#overview)
 
-[Pre-Requisites](#pre-requisites)
+[Prerequisites](#Prerequisites)
 
 [Sign in to OCI Console and create ADW instance](#sign-in-to-oci-console-and-create-adw-instance)
 
@@ -38,7 +38,7 @@ Oracle Autonomous Data Warehouse Cloud provides an easy-to-use, fully autonomous
 
 **Note:** OCI UI is being updated thus some screenshots in the instructions might be different than actual UI
 
-## Pre-Requisites
+## Prerequisites
 
 1. OCI Training : https://cloud.oracle.com/en_US/iaas/training
 
@@ -82,7 +82,7 @@ Under **Configure the database**
 - Always Free: Leave Default
 - Choose database version: Leave Default
 - OCPU count: 1
-- Auto Sclaing: Make sure flag is checked
+- Auto Sclaing: Make sure flag is Un-checked
 
 Under **Create administrator credentials**
 
@@ -97,7 +97,7 @@ Under **Choose network access**
 
 Under **Choose a license type**
 
-- License Included: Check this opttion
+- License Included: Check this option
 
 4. Click **Create Autonomous Database**
 

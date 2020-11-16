@@ -4,7 +4,7 @@
 
 [Overview](#overview)
 
-[Pre-Requisites](#pre-requisites)
+[Prerequisites](#Prerequisites)
 
 [Sign in to OCI Console and create VCN](#sign-in-to-oci-console-and-create-vcn)
 
@@ -50,7 +50,7 @@ how easy it is to move additional storage with applicatons/tools installed betwe
 
 **Note:** OCI UI is being updated thus some screenshots in the instructions might be different than actual UI
 
-## Pre-Requisites
+## Prerequisites
 
 1. Oracle Cloud Infrastructure account credentials (User, 
    Password, Tenant, and Compartment)  
@@ -79,13 +79,9 @@ how easy it is to move additional storage with applicatons/tools installed betwe
 
 <img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/Grafana/img/Grafana_015.PNG" alt="image-alt-text">
 
-2. From the OCI Services menu,Click **Virtual Cloud Network**. Select the compartment assigned to you from drop down menu on left part of the screen under Networking and Click **Networking QuickStart**
-
-<img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/OCI_Quick_Start/img/RESERVEDIP_HOL001.PNG" alt="image-alt-text">
-
+2. From the OCI Services menu,Click **Virtual Cloud Networks** under Networking. Select the compartment assigned to you from drop down menu on left part of the screen under Networking and Click **Start VCN Wizard**
 
 **NOTE:** Ensure the correct Compartment is selected under COMPARTMENT list
-
 
 3. Click **VCN with Internet Connectivity** and click **Start Workflow**
 
@@ -479,7 +475,7 @@ appear.
 
 1. Click Action icon for the Block Volume, then **ISCSI Commands & Information**
 
-**NOTE:** The iSCSI Commands and Information dialog box displays specific identifying information about your volume and the iSCSI commands you'll need. The commands are ready to use with the appropriate information included. You can copy and paste the commands into your instance once you login.
+**NOTE:** The iSCSI Commands and Information dialog box displays specific identifying information about your volume and the iSCSI commands you will need. The commands are ready to use with the appropriate information included. You can copy and paste the commands into your instance once you login.
 
 <img src="https://raw.githubusercontent.com/oracle/learning-library/master/oci-library/qloudable/OCI_Quick_Start/img/Customer_Lab_017.PNG" alt="image-alt-text">
 
